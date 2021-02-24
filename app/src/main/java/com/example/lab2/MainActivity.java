@@ -1,9 +1,12 @@
 package com.example.lab2;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,11 +35,28 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String s = editText.getText().toString();
+
+                Log.i("MainActivity", "String: " + s);
                 i.putExtra("testString", s);
 
-                startActivity(i);
-
+                //startActivity(i);
+                startActivityForResult(i, REQUEST_CODE);
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            Bundle extras = data.getExtras();
+            if(extras != null){
+                int imageID = extras.getInt("imageID");
+
+                ConstraintLayout currentLayout = findViewById(R.id.main_layout);
+                currentLayout.setBackground(getDrawable(imageID));
+            }
+        }
     }
 }
